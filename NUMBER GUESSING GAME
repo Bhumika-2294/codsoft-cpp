@@ -1,0 +1,29 @@
+// Create a program that generates a random number and asks the user to guess it. Provide feedback on whether the guess is too high or too low until the user guesses the correct number.
+#include <iostream>
+#include <cstdlib>
+#include <time.h>
+using namespace std;
+int x;                                        //global variable
+//Function for checking the guess
+void check(int a){
+    if(a<(x+5)&&(a>(x-5))){
+        cout<<"Congrats! Your guess is too high.\n";
+    }
+    else{
+        cout<<"oops! So Sorry \nYour guess is too low.\n";
+    }
+}
+int main(){
+    srand((time(0)));
+    int max;                       //the maximum limit you want
+    cout<<"Enter the maximum number : ";
+    cin>>max;
+    x = rand()%(max-1 + 1) + 1;//Random no. generator
+    int guess;
+    cout<<"guess the nuumber : ";
+    cin>>guess;
+    check(guess);                             //using function
+    cout<<"the number generated was "<<x;
+    return 0;
+
+}
