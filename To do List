@@ -1,7 +1,108 @@
-Build a simple console-based to-do list manager that allows users to add, view, and  delete tasks 
-Task Input: Allow users to input tasks they want to add to the list.
-Add Task: Implement a function to add tasks to the list.
-View Tasks: Display the list of tasks with their status (completed or
-pending).
-Mark Task as Completed: Allow users to mark tasks as completed.
-Remove Task: Provide an option to remove tasks from the list.
+// Build a simple console-based to-do list manager that allows users to add, view, and  delete tasks 
+// Task Input: Allow users to input tasks they want to add to the list.
+// Add Task: Implement a function to add tasks to the list.
+// View Tasks: Display the list of tasks with their status (completed or pending).
+// Mark Task as Completed: Allow users to mark tasks as completed.
+// Remove Task: Provide an option to remove tasks from the list.
+
+#include <iostream>
+#include <vector>
+
+struct Task {
+    std::string description;
+    bool completed;
+};
+
+class TodoList {
+private:
+    std::vector<Task> tasks;
+
+public:
+    void addTask(const std::string& description) {
+        tasks.push_back({description, false});
+        std::cout << "Task '" << description << "' added successfully!" << std::endl;
+    }
+
+    void viewTasks() {
+        if (tasks.empty()) {
+            std::cout << "No tasks found." << std::endl;
+        } else {
+            std::cout << "Tasks:" << std::endl;
+            for (size_t i = 0; i < tasks.size(); ++i) {
+                const auto& task = tasks[i];
+                std::cout << i + 1 << ". " << task.description << " - " << (task.completed ? "Completed" : "Pending") << std::endl;
+            }
+        }
+    }
+
+    void markCompleted(size_t index) {
+        if (index >= 1 && index <= tasks.size()) {
+            tasks[index - 1].completed = true;
+            std::cout << "Task '" << tasks[index - 1].description << "' marked as completed!" << std::endl;
+        } else {
+            std::cout << "Invalid task index." << std::endl;
+        }
+    }
+
+    void removeTask(size_t index) {
+        if (index >= 1 && index <= tasks.size()) {
+            auto removedTask = tasks[index - 1];
+            tasks.erase(tasks.begin() + index - 1);
+            std::cout << "Task '" << removedTask.description << "' removed successfully!" << std::endl;
+        } else {
+            std::cout << "Invalid task index." << std::endl;
+        }
+    }
+};
+
+int main() {
+    TodoList todoList;
+
+    while (true) {
+        std::cout << "\nOptions:" << std::endl;
+        std::cout << "1. Add Task" << std::endl;
+        std::cout << "2. View Tasks" << std::endl;
+        std::cout << "3. Mark Task as Completed" << std::endl;
+        std::cout << "4. Remove Task" << std::endl;
+        std::cout << "5. Exit" << std::endl;
+
+        int choice;
+        std::cout << "Enter your choice (1-5): ";
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                std::string taskDescription;
+                std::cout << "Enter the task: ";
+                std::cin.ignore();
+                std::getline(std::cin, taskDescription);
+                todoList.addTask(taskDescription);
+                break;
+            }
+            case 2:
+                todoList.viewTasks();
+                break;
+            case 3: {
+                size_t index;
+                std::cout << "Enter the task index to mark as completed: ";
+                std::cin >> index;
+                todoList.markCompleted(index);
+                break;
+            }
+            case 4: {
+                size_t index;
+                std::cout << "Enter the task index to remove: ";
+                std::cin >> index;
+                todoList.removeTask(index);
+                break;
+            }
+            case 5:
+                std::cout << "Exiting the to-do list manager. Goodbye!" << std::endl;
+                return 0;
+            default:
+                std::cout << "Invalid choice. Please enter a number between 1 and 5." << std::endl;
+        }
+    }
+
+    return 0;
+}
